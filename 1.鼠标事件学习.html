@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    .container {
+        height: 500px;
+        background: #DFDFDF;
+    }
+</style>
+
+<body>
+    <div class="container">
+
+    </div>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script>
+        // 点击事件
+        let divContainer = d3.select('.container').on("click", function () {
+            console.log('1111')
+        })
+        // 鼠标移动事件
+        // d3.select('.container').on('mousemove', function (data) {
+        //     console.log(data)
+        // })
+        // 触摸屏开始
+        // d3.select('.container').on('touchstart', function (data) {
+        //     console.log(data)
+        // })
+        // 当触摸点在触摸屏上移动时
+        // d3.select('.container').on('touchmove', function (data) {
+        //     console.log(data)
+        // })
+        // 当触摸点从触摸屏上拿开时
+        // d3.select('.container').on('touchend', function (data) {
+        //     console.log(data)
+        // })
+    </script>
+</body>
+
+</html>

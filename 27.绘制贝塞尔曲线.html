@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        #svg {
+            height: 100%;
+            width: 100%;
+            background: #DFDFDF;
+        }
+    </style>
+</head>
+
+<body>
+    <svg id="svg">
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script>
+        var svg = d3.select("svg")
+        var g = svg.append("g").attr("id", "g_id")
+        var circleData = [{
+            id: "circle1",
+            cx: 100,
+            cy: 100,
+            r: 30
+        }, {
+            id: "circle2",
+            cx: 400,
+            cy: 400,
+            r: 30
+        }]
+
+        let lines = [{
+            id: "a",
+            from: "circle1",
+            to: "circle2"
+        }, {
+            id: "b",
+            from: "circle1",
+            to: "circle2"
+        }]
+
+        // 计算控制点
+
+
+
+        // var g1 = svg.append('g').attr("class", "gcircle")
+        // g1.selectAll('circle').data(circleData).enter().append("circle").attr("cx", d => d.cx).attr("cy", d => d.cy).attr("r", d => d.r).attr("fill", "#999").attr("id", d => d.id)
+
+        // // 组装连线的数据
+        // var lineData = []
+        // for (let i = 0; i < lines.length; i++) {
+        //     let from = d3.select(`#${lines[i].from}`)
+        //     let to = d3.select(`#${lines[i].to}`)
+        //     console.log(from)
+        //     console.log(to)
+        //     let obj = {
+        //         id: lines[i].id,
+        //         from: lines[i].from,
+        //         to: lines[i].to,
+        //         lineL: [{ x: from._groups[0][0].__data__.cx, y: from._groups[0][0].__data__.cy }, { x: to._groups[0][0].__data__.cx, y: to._groups[0][0].__data__.cy }]
+        //     }
+        //     lineData.push(obj)
+        // }
+        // console.log(lineData)
+
+        // // 直线
+        // var line = d3.line().x(function (d) {
+        //     return d.x
+        // }).y(function (d) {
+        //     return d.y
+        // })
+
+        // // 画直线
+        // for (let i = 0; i < lineData.length; i++) {
+        //     var path = g.append("path").attr("id", lineData[i].id)
+        //     path.attr("d", line(lineData[i].lineL)).attr("stroke", "green").attr("fill", "none")
+        // }
+
+        // function renderLine(data) {
+        //     for (let i = 0; i < data.length; i++) {
+        //         d3.selectAll(`#${data[i].id}`).attr('d', line(data[i].lineL))
+        //     }
+        // }
+
+
+        // // 引入拖动
+        // var drag = d3.drag()
+        // var circles = svg.selectAll("circle")
+        // // console.log(circles)
+        // circles.call(drag.on("start", function () {
+        //     var circle = d3.select(this)
+        //     d3.event.on("drag", dragged).on("end", ended);
+        //     function dragged(d) {
+        //         circle.raise().attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+        //         let arrLines = []
+        //         for (let j = 0; j < lineData.length; j++) {
+        //             if (lineData[j].from == d.id) {
+        //                 lineData[j].lineL = [{ x: d.x, y: d.y }, { x: lineData[j].lineL[1].x, y: lineData[j].lineL[1].y }]
+        //                 arrLines.push(lineData[j])
+        //             } else if (lineData[j].to == d.id) {
+        //                 console.log(lineData[j])
+        //                 lineData[j].lineL = [{ x: lineData[j].lineL[0].x, y: lineData[j].lineL[0].y }, { x: d.x, y: d.y }]
+        //                 arrLines.push(lineData[j])
+        //             }
+        //         }
+        //         if (arrLines.length != 0) {
+        //             renderLine(arrLines)
+        //         }
+        //     }
+        //     function ended() {
+        //         circle.classed("dragging", false);
+        //     }
+        // }))
+
+        // // 贝塞尔曲线
+        // var link = d3.linkRadial()
+        //     .angle(function (d) { return d.x; })
+        //     .radius(function (d) { return d.y; });
+
+
+
+        // var circle1 = g1.append('circle').attr("class", "circle1").attr("id", "circle1")
+        // var circle2 = g1.append('circle').attr("class", "circle2").attr("id", "circle1")
+        // circle1.attr("cx", 100).attr("cy", 100).attr("r", 20).attr("fill", "#999")
+        // circle2.attr("cx", 400).attr("cy", 400).attr("r", 20).attr("fill", "#999")
+
+        // 画圆
+
+
+        // 贝塞尔
+        // var link = d3.linkHorizontal()
+        //     .x(function (d) {
+        //         return d.x;
+        //     })
+        //     .y(function (d) { return d.y; })
+        // // 直线
+        // var line = d3.line()
+        //     .x(function (d) {
+        //         return d.x
+        //     }).y(function (d) {
+        //         return d.y
+        //     })
+
+        // for (let i = 0; i < lines.length; i++) {
+        //     var path = svg.append("path").attr("id", lines[i].id)
+        //     if (i == 0) {
+        //         path.attr("id", lines[i].id).attr("d", line(lines[0].lineL)).attr("stroke", "red")
+        //     } else {
+        //         let obj = {
+        //             source: { x: lines[i].lineL[0].x, y: lines[i].lineL[0].y },
+        //             target: { x: lines[i].lineL[1].x, y: lines[i].lineL[1].y }
+        //         }
+        //         path.attr("id", lines[i].id).attr("d", link(obj)).attr("stroke", "#333").attr("fill", "none")
+        //     }
+        // }
+        // var circles = d3.selectAll("circle")
+        // var drag = d3.drag();
+        // circles.call(drag.on("start", function () {
+        //     var circle = d3.select(this).classed("dragging", true);
+        //     d3.event.on("drag", dragged).on("end", ended);
+        //     function dragged(d) {
+        //         // 移动的时候打印当前坐标
+        //         console.log(circle._groups[0])
+        //         console.log(circle._groups[0][0].cx.animVal.value)
+        //         console.log(circle._groups[0][0].cy.animVal.value)
+        //         circle.raise().attr("cx", d3.event.x).attr("cy", d3.event.y);
+        //     }
+        //     function ended() {
+        //         console.log(this)
+        //         console.log(circle)
+        //         circle.classed("dragging", false);
+        //     }
+        // }))
+    </script>
+
+</body>
+
+</html>

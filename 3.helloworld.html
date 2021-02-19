@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>hello World</p>
+    <p>hello World</p>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <!--d3.select /// de.selectAll() 选择-->
+    <!--d3.select.selectAll().txet()-->
+    <script>
+        let p = d3.select('body').selectAll('p').text("www.baidu.con")
+        p.style("color", 'red').style("font-size", "32px")
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <svg width="500" height="600">
+
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script>
+        var svg = d3.select('svg')
+        var width = +svg.attr("width")
+        var height = +svg.attr("height")
+        let position = {
+            left: 50,
+            top: 50,
+            right: 50,
+            bottom: 50
+        }
+        // 拖动节点重新划线
+        let obj = [{
+            node: "node1",
+            x: 60,
+            y: 60,
+            r: 5
+        }, {
+            node: "node2",
+            x: 360,
+            y: 360,
+            r: 10
+        }]
+
+        svg.selectAll("circle").data(obj).enter().append("circle").attr("dataSet", function (d, i) {
+            return JSON.stringify(d)
+        }).attr("cx", function (d, i) {
+            return d.x
+        }).attr("cy", function (d, i) {
+            return d.y
+        }).attr("r", function (d, i) {
+            return d.r
+        }).attr("fill", "green")
+
+        // 创建两个节点之间连线
+        for (let i = 0; i < obj.length - 1; i++) {
+            for (let j = i + 1; j < obj.length; j++) {
+                svg.append("line")
+                    .attr("x1", obj[i].x)
+                    .attr("y1", obj[i].y)
+                    .attr("x2", obj[j].x)
+                    .attr("y2", obj[j].y)
+                    .attr("stroke", "#333")
+            }
+        }
+
+        // 拖动点
+        var drag = d3.drag();
+
+        function started() {
+            console.log(this)
+            var circle = d3.select(this).classed("dragging", true);
+            d3.event.on("drag", dragged).on("end", ended);
+
+            function dragged(d) {
+                circle.raise().attr("cx",d.x = d3.event.x).attr("cy", d.y =d3.event.y);
+            }
+            function ended() {
+                circle.classed("dragging", false);
+            }
+        }
+        d3.selectAll("circle").call(drag.on("start", started))
+
+        // 两点之间画弧线
+        // 两点之间画虚线
+    </script>
+</body>
+
+</html>

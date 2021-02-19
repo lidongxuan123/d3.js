@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .domain {
+            display: none;
+        }
+
+        .line_tick {
+            opacity: 0.5;
+            color: #DFDFDF;
+        }
+    </style>
+</head>
+
+<body>
+    <svg width="500" height="600" id="svg">
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
+    <script>
+        // 主要做三方面的练习
+        // 1.去除坐标轴的横线
+        // 2.坐标轴刻度
+        // 3.数据格式化
+        // 4.添加横线
+
+
+        const data = [
+            {
+                date: '2019 - 11 - 10T08: 53',
+                value: 36,
+                condition: "SCT",
+            }, {
+                date: '2019 - 11 - 10T09: 19',
+                value: 36,
+                condition: "BKN",
+            }, {
+                date: '2019 - 11 - 10T09: 42',
+                value: 36,
+                condition: "SCT",
+            }, {
+                date: '2019 - 11 - 10T09: 53',
+                value: 35.1,
+                condition: "FEW",
+            }, {
+                date: '2019 - 11 - 10T10: 53',
+                value: 35.1,
+                condition: "OVC",
+            }, {
+                date: '2019 - 11 - 10T11: 53',
+                value: 35.1,
+                condition: "OVC",
+            }, {
+                date: '2019 - 11 - 10T12: 53',
+                value: 33.1,
+                condition: "FEW",
+            }, {
+                date: '2019 - 11 - 10T13: 06',
+                value: 34,
+                condition: "BKN",
+            }, {
+                date: '2019 - 11 - 10T13: 53',
+                value: 33.1,
+                condition: "BKN",
+            }, {
+                date: '2019 - 11 - 10T13: 58',
+                value: 33.1,
+                condition: "SCT",
+            }, {
+                date: '2019 - 11 - 10T14: 53',
+                value: 30.9,
+                condition: "FEW",
+            }, {
+                date: '2019 - 11 - 10T15: 53',
+                value: 32,
+                condition: "FEW",
+            }, {
+                date: '2019 - 11 - 10T16: 53',
+                value: 30.9,
+                condition: "CLR",
+            },{
+                date: '2019 - 11 - 10T16: 53',
+                value: -10,
+                condition: "CLR",
+            }
+        ]
+
+        const padding = {
+            top: 50,
+            bottom: 50,
+            right: 50,
+            left: 50
+        }
+        const svg = d3.select("svg#svg")
+        const width = +svg.attr("width")
+        const height = +svg.attr("height")
+        const innerWidth = width - padding.left - padding.right
+        const innerHeight = width - padding.top - padding.bottom
+
+
+        // 对数据进行处理
+        // 对日期进行处理
+        let DateArr = []
+        for (let i = 0; i < data.length; i++) {
+            let time = new Date(data[i].date)
+            let month = time.getMonth()
+            let day = time.getDate()
+            DateArr.push(month + "/" + day)
+        }
+
+        let xScale, yScale;
+        let g = svg.append("g")
+        // 创建x轴坐标
+        function createScale(data) {
+            xScale = d3.scaleBand().domain(data.map(d => d.date)).range([0, innerWidth]).padding(1)
+            yScale = d3.scaleLinear().domain([-10, Math.floor(d3.max(data, d => d.value))
+            ]).range([
+                innerHeight, 0
+            ]).nice()
+
+            // 创建xy轴
+
+            let xAxis = g.append("g").call(d3.axisBottom(xScale)).attr("transform", `translate(${padding.left}, ${padding.top + innerHeight})`)
+            let yAxis = g.append("g").call(d3.axisLeft(yScale).tickValues(5).tickSize(-innerWidth).tickFormat(d3.format("$~f"))
+                .tickValues(d3.scaleLinear().domain(yScale.domain()).ticks())).attr("transform", `translate(${padding.left}, ${padding.top})`)
+        }
+        createScale(data)
+
+
+        // 创建色系
+        var defs = svg.append("defs").attr("id", "defs")
+
+        let linearGrader = defs.append("linearGradient").attr("id", "color").attr("x1", "0%").attr("y1", "0%").attr("x2", "0%").attr("y2", "100%")
+
+
+        let stop1 = linearGrader.append("stop").attr("offset", "5%").attr("stop-color", "green")
+        let stop2 = linearGrader.append("stop").attr("offset", "50%").attr("stop-color", "red")
+
+
+        
+
+        // 创建变色连线
+        var line = d3.line().curve(d3.curveStep).x(d => xScale(d.date)).y(d => yScale(d.value))
+
+        // 获取颜色
+        var color = d3.scaleOrdinal(d3.schemeCategory10)
+
+        var path = g.append("path")
+        path.datum(data).attr("fill", "none")
+            .attr("stroke", "url(#color)")
+            .attr("stroke-width", 2)
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("d", line).attr("transform", `translate(${padding.left}, ${padding.top})`)
+
+
+        // 旋转坐标
+
+
+        // svg.selectAll("g.tick text").attr("transform","rotate(50deg)")
+        // g.selectAll(".tick line").attr("class", "line_tick")
+        // let gs = g.append("g")
+        //     .attr("stroke-linecap", "round")
+        //     .attr("stroke", "black")
+        //     .selectAll("g")
+        //     .data(data)
+        //     .join("g")
+        //     .attr("transform", function (d, i) {
+        //         let time = new Date(d.date)
+        //         let month = time.getMonth()
+        //         let day = time.getDate()
+        //         return "translate(" + xScale(month + '/' + day) + ',' + padding.top + ") "
+        //     })
+        // gs.append("line")
+        //     .attr("y1", d => {
+        //         return yScale(d.low)
+        //     })
+        //     .attr("y2", d => { return yScale(d.high) }).attr("transform", `translate(${padding.left}, ${0})`);
+        // gs.append("line")
+        //     .attr("y1", d => {
+        //         return yScale(d.open)
+        //     }).attr("transform", `translate(${padding.left}, ${0})`)
+        //     .attr("y2", d => { return yScale(d.close) }).attr("stroke-width", 5).attr("stroke", function (d, i) {
+        //         if (d.open > d.close) {
+        //             return "green"
+        //         } else {
+        //             return "red"
+        //         }
+        //     });
+        // 添加网格线
+    </script>
+</body>
+
+</html>

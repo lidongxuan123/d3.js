@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+<!--<svg width="120" height="120"  viewBox="0 0 120 120"
+     xmlns="http://www.w3.org/2000/svg" version="1.1"
+     xmlns:xlink="http://www.w3.org/1999/xlink" >
+
+    <defs>
+        <linearGradient id="MyGradient">
+            <stop offset="5%"  stop-color="green"/>
+            <stop offset="95%" stop-color="gold"/>
+        </linearGradient>
+    </defs>
+
+    <rect fill="url(#MyGradient)"
+          x="10" y="10" width="100" height="100"/>
+</svg>-->
+
+
+    <svg width="500" height="600" id="svg">
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
+    <script>
+
+    // 知识学习
+
+    // each方法允许我们对就选择集中DOM元素的处理行为
+    // selectAll("xxx").each(function() {})
+
+
+    // 在调用访问器函数时d3会将this指向当前要处理的DOM对象，并传入两个参数 datum  index
+
+
+    // svg defs元素
+    // svg的 defs元素用于定义一个元素使其能够在svg图像中重复使用,例如你可以将一些图形制作为一个组,并用defs元素来定义它,然后你就可以在svg图像中将它作为简单图形来重复使用
+
+    // 在defs元素中定义的图形不会直接显示svg图像上,要显示它需要使用use元素来引入他们
+
+
+    var svg = d3.select("svg")
+    // 创建复用的图形
+    let defs = svg.append("defs")
+    let g = defs.append("g").attr("id", "shape")
+
+    g.append("rect").attr("class", "rect").attr("x", 200).attr("y", 200).attr("width", 100).attr("height", 100)
+
+    g.append("circle").attr("class", "circle").attr("cx", 200).attr("cy", 200).attr("r", 30)
+    svg.append("use").attr("xlink:href", "#shape")
+   
+
+   // 渐变的使用    
+
+   let defsColor = svg.append("defs").attr("id", "shapeColor")
+
+   let linearGrader = defs.append("linearGradient").attr("id", "color").attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%")
+
+   let stop1 =linearGrader.append("stop").attr("offset", "5%").attr("stop-color", "#333")
+   let stop2 =linearGrader.append("stop").attr("offset", "50%").attr("stop-color", "red")
+
+
+   d3.select(".rect").attr("fill", "url(#color)").attr("stroke-width", 1.5)
+
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <svg width="500" height="600">
+
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script>
+        const svg = d3.select('svg')
+        const position = {
+            top: 150,
+            left: 50,
+            right: 50,
+            bottom: 50
+        }
+        const width = +svg.attr("width")
+        const height = +svg.attr("height")
+        const innerHeight = height - position.top - position.bottom
+        const innerWidth = width - position.left - position.right
+
+        let data = [{
+            name: "小明",
+            value: 24
+        }, {
+            name: "小红",
+            value: 28
+        }, {
+            name: "小青",
+            value: 22
+        }, {
+            name: "小白",
+            value: 45
+        }, {
+            name: "小白2",
+            value: 45
+        }]
+        // 创建y比例尺
+        const yScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([innerHeight, 0])
+
+        // 创建x比例尺
+        const xScale = d3.scaleBand().domain(data.map(d => d.name)).range([0, innerWidth]).padding(0.1)
+
+        //    创建坐标轴
+        const xAxis = d3.axisBottom(xScale)
+        const yAxis = d3.axisLeft(yScale)
+
+        var g = svg.append("g").attr("id", "maingroup").attr("transform", `translate(${position.left},${position.top})`)
+
+        g.append("g").call(xAxis).attr("transform", `translate(${0},${innerHeight})`)
+        g.append("g").call(yAxis)
+
+        var color = d3.scaleOrdinal(d3.schemeCategory10)
+        // 创建矩形
+        data.forEach(function (element, index) {
+            g.append("g").append("rect").attr("class", "content")
+                .attr("dataValue", JSON.stringify(element))
+                .attr("x", xScale(element.name))
+                .attr("y", xScale(element.value))
+                .attr("height", innerHeight - yScale(element.value))
+                .attr("width", xScale.bandwidth())
+                .attr("fill", color(index))
+                .attr("transform", `translate(${0},${yScale(element.value)})`)
+        })
+
+        // 添加文字
+        g.append("text").attr("id", "title").text("柱状图").attr("font-size", "2em").attr("transform", `translate(${innerWidth / 2}, -50)`).attr("text-anchor", "middle")
+
+
+        data.forEach(function (element, index) {
+            g.append("text").text(element.value).attr("x",
+                xScale(element.name)
+            ).attr("y",
+                yScale(element.value)
+                ).attr("transform", `translate(${xScale.bandwidth() / 2},${16})`).attr("text-anchor", "middle").style("color", color(index))
+        })
+        // 创建面板元素
+        let template = svg.append("g").append("rect").attr("class", "templateRect").attr("x", 0).attr("y", 10).attr("min-height", 100).attr("min-width", 100).attr("fill", "green")
+        // 添加鼠标
+        var coordinates;
+
+        svg.on("mousemove", function () {
+            coordinates = d3.mouse(this);
+        })
+        // 给柱状图提前设置颜色模板
+        // 修改样式
+        svg.selectAll(".tick text").attr("font-size", "16px")
+        svg.selectAll("rect.content").on("mousemove", function (d, i) {
+            let value = JSON.parse(this.getAttribute("dataValue"))
+
+            d3.select(this).transition().duration(500).attr("fill", "yellow").style("cursor", "pointer")
+
+            var x = coordinates[0];
+            var y = coordinates[1];
+            // if (template) {
+            //     template.style("display", "block").attr("fill", "#fff").style("opacity", "0.8")
+            // }
+            // if (x + 100 <= innerWidth) {
+            //     template.attr("x", x + 10).attr("y", y + 10).attr("height", 100).attr("width", 100).selectAll("text").enter().append("text").text('11111').style("color", "red").style("font-size", "16px")
+            // } else {
+            //     template.attr("x", x - 100).attr("y", y + 10).attr("min-height", 100).attr("min-width", 100).selectAll("text").enter().append("text").text('11111').style("font-size", "16px")
+            // }
+        }).on("mouseout", function (d, i) {
+            d3.select(this).transition().duration(500).attr("fill", color(i)).style("cursor", "pointer")
+            // template.style("display", "none")
+        })
+    </script>
+</body>
+
+</html>

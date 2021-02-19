@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <svg width="500" height="600">
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script>
+        let dataArr = ["2021-09-08", "2021-09-09", "2021-09-10", "2021-09-11"]
+        let data = [[{
+            date: "2021-09-08",
+            address: "北京",
+            all: 12000,
+            day: 100
+        }], [{
+            date: "2021-09-09",
+            address: "北京",
+            all: 12000,
+            day: 106
+        }], [{
+            date: "2021-09-10",
+            address: "北京",
+            all: 12000,
+            day: 106
+        }], [{
+            date: "2021-09-11",
+            address: "北京",
+            all: 12000,
+            day: 106
+        }]]
+        var svg = d3.select('svg')
+        var width = +svg.attr("width")
+        var height = +svg.attr("height")
+        let position = {
+            left: 50,
+            top: 50,
+            right: 50,
+            bottom: 50
+        }
+        var innerWidth = width - position.left - position.right
+        var innerHeight = height - position.top - position.bottom
+
+        // 添加坐标
+        // x轴
+        const xScale = d3.scaleLinear().domain([0, 10]).range([0, innerHeight]).nice()
+        // y轴
+        const yScale = d3.scaleLinear().domain([10, 0]).range([0, innerWidth]).nice()
+        // 添加xy轴
+        const xAxis = d3.axisBottom(xScale)
+        const yAxis = d3.axisLeft(yScale)
+
+        var g = svg.append("g").attr("id", "maingroup").attr("transform", `translate(${position.left},${position.top})`)
+
+        g.append("g").call(xAxis).attr("transform", `translate(${0},${innerHeight-100})`)
+        g.append("g").call(yAxis)
+
+        // 制作导航图
+        // 添加节点的颜色
+        var color = d3.scaleOrdinal(d3.schemeCategory10)
+    </script>
+</body>
+
+</html>

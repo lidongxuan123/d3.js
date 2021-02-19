@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        #svg {
+            height: 100%;
+            width: 100%;
+            /*background: #DFDFDF;*/
+        }
+    </style>
+</head>
+
+<body>
+    <!--图片加载不出来-->
+    <svg id="svg">
+        <defs id="des">
+            <pattern id="image" x="100" y="100" height="200" width="200">
+                <image x="100" y="100" height="200" width="200"></image>
+            </pattern>
+        </defs>
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script>
+        var formatTime = d3.timeFormat("%B %d, %Y");
+        formatTime(new Date); // "June 30, 2015"
+        var svg = d3.select("svg")
+        svg.append("text").text(formatTime(new Date)).attr("x", 100).attr("y", 100)
+        var parseTime = d3.timeParse("%B %d, %Y");
+        parseTime("June 30, 2015"); // Tue Jun 30 2015 00:00:00 GMT-0700 (PDT)
+        svg.append("text").text(parseTime("June 30, 2015")).attr("x", 100).attr("y", 200)
+
+
+        var formatMillisecond = d3.timeFormat("%L"),
+            formatSecond = d3.timeFormat("%S"),
+            formatMinute = d3.timeFormat("%I:%M"),
+            formatHour = d3.timeFormat("%I %p"),
+            formatDay = d3.timeFormat("%a %d"),
+            formatWeek = d3.timeFormat("%b %d"),
+            formatMonth = d3.timeFormat("%B"),
+            formatYear = d3.timeFormat("%Y");
+            formatwe = d3.timeFormat("%a");
+            formatWe = d3.timeFormat("%A");
+
+console.log(formatMillisecond(new Date))
+console.log(formatSecond(new Date))
+console.log(formatMinute(new Date))
+console.log(formatHour(new Date))
+console.log(formatDay(new Date))
+console.log(formatWeek(new Date))
+console.log(formatMonth(new Date))
+console.log(formatYear(new Date))
+console.log(formatwe(new Date))
+console.log(formatWe(new Date))
+
+    </script>
+
+</body>
+
+</html>

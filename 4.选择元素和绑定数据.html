@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>hello World</p>
+    <p>hello World</p>
+    <p>hello World</p>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <!--d3.select /// de.selectAll() 选择-->
+    <!--d3.select.selectAll().txet()-->
+    <script>
+        // 选择元素
+        // d3.select() // 是选择指定元素的第一个
+        // d3.selectAll() //是选择指定元素的全部
+
+        // var body = d3.select("body")
+        // var p1 = body.select("p")
+        // var p =body.selectAll("p")
+        // var svg = body.select("svg")  //选择body中svg元素
+
+        // var rects = svg.selectAll("rect")  //选择svg中所有的svg元素
+
+        // 绑定数据
+        // D3有一个很独特的功能，能将数据绑定到DOM上，也就是绑定到文档上
+        // D3中是通过以下两个函数绑定数据
+        // datum(): 绑定一个数据到数据集
+        // data(): 绑定一个数组到选择集，数组的各项值分别与选择集的各元素绑定
+        
+        // datum假设有一字符串china,要将此字符串分别与三个段落绑定
+        var str = "china"
+        var body = d3.select("body")
+        var p = body.selectAll("p")
+        p.datum(str) 
+        // d代表数据，也即是与某元素绑定的数据
+        // i 代表索引，代表数据的索引号，从0开始
+        p.text(function(d,i){
+            return "第"+ i + "个元素是"+ d
+        })
+        // data（）
+        var dataset = ['A',"B","C"]
+        p.data(dataset).text(function(d,i) {
+            return i+'----'+d
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <svg width="500" height="600" id="svg">
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script>
+        const data = [{
+            name: "Puerto Rico",
+            value: -0.14281404556189306
+        }, {
+            name: "Illinois",
+            value: -0.01237748849783861
+        }, {
+            name: "Vermont",
+            value: -0.0027998804617245794
+        }, {
+            name: "Connecticut",
+            value: -0.0024649582817701924
+        }, {
+            name: "Mississippi",
+            value: 0.0029831863814104216
+        }, {
+            name: "New York",
+            value: 0.0038940346170125433
+        }, {
+            name: "Rhode Island",
+            value: 0.00645469599559933
+        }, {
+            name: "Pennsylvania",
+            value: 0.007841838131266592
+        }, {
+            name: "New Jersey",
+            value: 0.010270369501725113
+        }, {
+            name: "Michigan",
+            value: 0.010443217276226168
+        }, {
+            name: "Maine",
+            value: 0.011932750208715854
+        }, {
+            name: "Ohio",
+            value: 0.013227230710447463
+        }, {
+            name: "New Mexico",
+            value: 0.018283985996360684
+        }, {
+            name: "New Mexico",
+            value: 0.3283985996360684
+        }]
+        var xScale;
+        var yScale;
+        const padding = {
+            top: 50,
+            bottom: 50,
+            right: 50,
+            left: 50
+        }
+        const svg = d3.select("svg#svg")
+        const width = +svg.attr("width")
+        const height = +svg.attr("height")
+        const innerWidth = width - padding.left - padding.right
+        const innerHeight = width - padding.top - padding.bottom
+        let min_value = d3.min(data, d => d.value) > 0? 0 : d3.min(data, d => d.value)
+        let max_value = d3.max(data, d => d.value) < 0? 0 : d3.max(data, d => d.value)
+        xScale = d3.scaleLinear().domain([min_value, max_value]).range([0, innerWidth]).nice()
+
+        yScale = d3.scaleBand().domain(d3.range(data.length)).range([0, innerHeight]).padding(1)
+        const g = svg.append("g").attr("id", "g_y").attr("transform", `translate(${padding.left},${padding.top})`)
+        // const xAxis = d3.axisBottom(xScale).tickSize(-innerHeight).tickPadding(10)
+        // const yAxis = d3.axisLeft(yScale).tickSize(-innerWidth).tickPadding(10)
+        const xAxis = d3.axisBottom(xScale)
+        const yAxis = d3.axisLeft(yScale).tickFormat(i =>{ return data[i].name+"$"}).tickSize(0).tickPadding(6)
+        // 生成y轴坐标
+
+        g.append("g").attr("class", "yAxis").call(yAxis).call(g => g.selectAll(".tick text").filter(i => {
+            return data[i].value < 0
+            })
+            .attr("text-anchor", "start")
+            .attr("x", 6))
+        // g.append("g").attr("class", "yAxis").call(yAxis)
+        g.append("g").call(xAxis).attr("class", "xAxis").attr("transform", `translate(0,${innerHeight})`)
+
+
+        d3.select(".yAxis").attr("transform", `translate(${xScale(0)}, ${0})`)
+        d3.select(".xAxis path").style("display", "none")
+
+        // 绘画柱状图
+
+        g.selectAll("rect").data(data).join().attr("x", function(d, i) {
+            return xScale(d.value)
+        }).attr("y", function(d, i) {
+            return yScale(d.name)
+        })
+
+
+    </script>
+</body>
+
+</html>

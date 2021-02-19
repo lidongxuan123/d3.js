@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script>
+        // 比例尺学习网站
+        // https://blog.csdn.net/claroja/article/details/80881035
+        // 比例尺的使用
+        // 比例尺很像数学中的函数，也有定义域和值域，分别称为domain和range,k开发者需要指定domain和range的范围即可得到一个计算关系。
+
+        // 线性比例尺
+        // 线性比例尺，能将一个连续的区间映射到另一个区间，要解决柱形图宽度的问题
+        // 就需要线性比例尺
+        // d3.scaleLinear()线性比例尺  
+        // domain连续性，range连续性
+        // 线性比例尺超出定义域的部分会按照映射拓展
+
+        var dataSet = [1.2, 2.3, 0.9, 1.5, 3.3]
+        // 将dataset中最小值映射成0，将最大的值映射成300
+        var min = d3.min(dataSet)
+        var max = d3.max(dataSet)
+        console.log(min)
+        console.log(max)
+        var linear = d3.scaleLinear().domain([min, max]).range([0, 300])
+        console.log(linear)
+        console.log(linear(1.1))
+        console.log(linear(3.1))
+        // 其中d3.scale.linear()返回一个线性比例尺。domain()和range()分别设置比例尺的定义域和值域
+        // d3.max() // 获取最大值
+        // d3.min() // 获取最小值
+
+        // 比例尺的定义域domain为[0.9, 3.3]
+        // 比例尺的值域range为： [0,300]
+
+        // 序数和比例尺
+        // 定义域和值域不一定是连续的
+        var index = [0, 1, 2, 3, 4]
+        var color = ["red", "blue", "green", "yellow", "black"];
+
+
+        // d3.scaleBand()序数比例尺
+        // domain： 离散型
+        // range: 连续型
+        // 可以理解为用domain将range平均分割
+        let scale_b = d3.scaleBand().domain([1, 2, 3, 4]).range([0, 100])
+        console.log(scale_b)
+
+        // d3.scaleOrdinal()序数比例尺
+        // domain: 离散型
+        // range: 离散型
+        // 可以简单理解为map映射
+        let scale_o = d3.scaleOridinal().domain(['a', 'b', 'c']).range([10, 20, 30])
+
+
+        // d3.scaleQuantize()量化比例尺
+        // domain: "连续型"
+        // range: "离散型",
+        // scaleBand的逆变换
+
+        let scale_q = d3.scaleQuantize().domain([0, 10]).range('s', 'm', 'l')
+
+        // d3.scaleTime()时间比例尺
+        // domain:连续型 是时间
+        // range: 连续,是刻度
+        let scale = d3.scaleTime().domain([new Data(2018, 0, 1, 0), new Data(2018, 0, 1, 2)]).range([0, 100])
+
+        // 颜色和比例尺
+        // d3.schemeCategory10
+        // d3.schemeCategory20
+        // d3.schemeCategory20b
+        // d3.schemeCatetegory20c
+        // let color = d3.scaleOridinal(d3.schemeCategory10)
+
+        // 其他比例尺
+        // d3.scaleIdentity() // 恒等比例尺
+        // d3.scaleSqrt() // 乘方比例尺
+        // d3.scalePow() // 类似scaleSqrt的乘方比例尺
+        // d3.scaleLog() // 对数比例尺
+        // d3.scaleQuantile() // 分位数比例尺
+    </script>
+</body>
+
+</html>

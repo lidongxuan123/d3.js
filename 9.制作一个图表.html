@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script>
+        var width = 300;
+        var height = 300;
+        var body = d3.select('body')
+        var svg = body.append("svg")
+        svg.attr("width", width).attr("height", height)
+        var dataSet = [200, 300, 1000]
+        // 创建一个坐标轴
+        var max = d3.max(dataSet)
+        var min = d3.min(dataSet)
+        var linear = d3.scaleLinear().domain([min, max]).range([0, 250])
+        // 创建图表矩形
+        var rectHeight = 25
+        svg.selectAll("rect")
+            .data(dataSet)
+            .enter()
+            .append("rect")
+            .attr("x", 20)
+            .attr("y", function (d, i) {
+                return i * rectHeight;
+            })
+            .attr("width", function (d) {
+                return linear(d);   //在这里用比例尺
+            })
+            .attr("height", rectHeight - 2)
+            .attr("fill", "steelblue");
+    </script>
+</body>
+
+</html>

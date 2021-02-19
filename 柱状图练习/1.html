@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <svg width="500" height="600" id="svg">
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script>
+        const data = []
+        for (let i = 0; i < 15; i++) {
+            data.push({
+                name: "name" + i,
+                value: Math.floor(Math.random() * 100)
+            })
+        }
+        console.log(data)
+        const padding = {
+            top: 50,
+            bottom: 50,
+            right: 50,
+            left: 50
+        }
+        const svg = d3.select("svg#svg")
+        const width = +svg.attr("width")
+        const height = +svg.attr("height")
+        const innerWidth = width - padding.left - padding.right
+        const innerHeight = width - padding.top - padding.bottom
+
+
+        const xScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([0, innerWidth])
+        const yScale = d3.scaleBand().domain(data.map(d => d.name)).range([0, innerHeight])
+
+        const xAxis = d3.axisBottom(xScale)
+        const yAxis = d3.axisLeft(yScale)
+
+        const g = svg.append("g").attr("id", "g_y").attr("transform", `translate(${padding.left},${padding.top})`)
+        g.append("g").call(yAxis)
+        g.append("g").call(xAxis).attr("transform", `translate(0,${innerHeight})`)
+    </script>
+</body>
+
+</html>

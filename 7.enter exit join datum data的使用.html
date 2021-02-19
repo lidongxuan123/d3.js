@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>hello World</p>
+    <p>hello World</p>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <!--d3.select /// de.selectAll() 选择-->
+    <!--d3.select.selectAll().txet()-->
+    <script>
+        // 1. enter
+        // 当绑定的元素的数量大于选择的元素的数量时，添加元素使他们完全匹配
+        // 使元素怒和数据一一绑定。
+        var dataset = ["apples", "bannanas"]
+        var genter = svg.sellect("g").data(dataset).enter().append('g')
+
+        // 2.exit()
+        // 当绑定的数据的数量小于选择的元素数量时，删除元素使他们完全匹配
+
+        var gexit = svg.selectAll("g") // 返回四个g元素:上面添加的4个元素
+            .data(dataset) // 绑定数据:dataset长度为4，g为0，所以添加四个g元素使之匹配
+            .exit() // 删除元素
+            .remove()
+
+        // join可以用来取代enter和exit
+
+        dataset = ["apples", "bananas", "cherries", "dates"];
+
+        var gjoin1 = svg.selectAll("g")
+            .data(dataset)
+            .join("g");
+
+        dataset.splice(1, 3);
+
+        var gjoin2 = svg.selectAll("g")
+            .data(dataset)
+            .join("g");
+
+        // datum 和data
+        // datum(): 将指定数据赋值给被选择元素
+        // data(): 将数据数组与选择集的元素结合
+    </script>
+</body>
+
+</html>

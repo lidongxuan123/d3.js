@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <!--<svg width="500" height="600" id="svg2">
+        <defs>
+            <marker id="arrow" markerUnits="strokeWidth" markerWidth="12" markerHeight="12" viewBox="0 0 12 12" refX="6" refY="6" orient="auto">
+                <path d="M2,2 L10,6 L2,10 L6,6 L2,2" style="fill: #000000;" />
+            </marker>
+        </defs>
+    </svg>-->
+    <svg width="500" height="600" id="svg">
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <!--<script src="https://cdn.bootcdn.net/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
+    <script>
+        // const data = [{
+        //     type: "苹果",
+        //     price: 2.34,
+        //     month: "一月"
+        // }, {
+        //     type: "苹果",
+        //     price: 2.4,
+        //     month: "二月"
+        // }, {
+        //     type: "苹果",
+        //     price: 2.6,
+        //     month: "三月"
+        // }, {
+        //     type: "苹果",
+        //     price: 5.34,
+        //     month: "五月"
+        // }]
+        const data = [{
+            name: "小明",
+            friends: ["小张", "小狼"]
+        }, {
+            name: "小红",
+            friends: ["小张", "小蓝"]
+        }, {
+            name: "小张",
+            friends: ["小明", "小红"]
+        }]
+
+        const padding = {
+            top: 50,
+            bottom: 50,
+            right: 50,
+            left: 50
+        }
+        const svg = d3.select("svg#svg")
+        const width = +svg.attr("width")
+        const height = +svg.attr("height")
+        const innerWidth = width - padding.left - padding.right
+        const innerHeight = width - padding.top - padding.bottom
+
+
+        // x坐标轴
+        var xScale = d3.scalePoint().domain([1, 2]).range([padding.left, innerWidth - padding.right])
+
+        var yScale1 = d3.scaleBand().domain(data.map(d => d.name)).range([0, innerHeight])
+        let brr = []
+        data.forEach(function (ele, index) {
+            brr = [...brr, ...ele.friends]
+            return
+        })
+        var fridentsData = Array.from(new Set(brr))
+        console.log(fridentsData)
+        var yScale2 = d3.scaleBand().domain(fridentsData).range([0, innerHeight])
+
+        var g = svg.append("g").attr("class", "one")
+        // 设置元素位置
+        data.forEach(function (d) {
+            g.append("text").text(d.name).attr("y", function () {
+                return yScale1(d.name)
+            }).attr("x", function () {
+                return xScale(1)
+            }).attr("transform", `translate(${0},${padding.top})`)
+        })
+
+        fridentsData.forEach((d) => {
+            g.append("text").text(d).attr("y", function () {
+                return yScale2(d)
+            }).attr("x", function () {
+                return xScale(2)
+            }).attr("transform", `translate(${padding.right},${padding.top})`)
+        })
+        let objArr = []
+        objArr = []
+        data.forEach(function (element, index) {
+            if (element.friends) {
+                for (let i = 0; i < element.friends.length; i++) {
+                    let arr = [{
+                        name: element.name,
+                        flag: 1,
+                        x1: 1,
+
+                    }, {
+                        name: element.friends[i],
+                        flag: 2,
+                        x1: 2
+                    }]
+                    objArr.push(arr)
+                }
+            }
+        })
+        console.log(objArr)
+        var path = svg.append("path")
+        // 创建连线
+        var line = d3.line()
+            .x(function (d) {
+                return xScale(d.x1)
+            })
+            .y(function (d) {
+                if (d.flag == 1) {
+                    return yScale1(d.name)
+                } else if (d.flag == 2) {
+                    return yScale2(d.name)
+                }
+            });
+
+        // 创建箭头直线
+        var defs = svg.append("defs");
+
+        var arrowMarker = defs.append("marker")
+            .attr("id", "arrow")
+            .attr("markerUnits", "strokeWidth")
+            .attr("markerWidth", "12")
+            .attr("markerHeight", "12")
+            .attr("viewBox", "0 0 12 12")
+            .attr("refX", "6")
+            .attr("refY", "6")
+            .attr("orient", "auto");
+
+        var arrow_path = "M2,2 L10,6 L2,10 L6,6 L2,2";
+
+
+        arrowMarker.append("path")
+            .attr("d", arrow_path)
+            .attr("fill", "#999");
+
+
+
+
+        for (let i = 0; i < objArr.length; i++) {
+            svg.append("path").datum(objArr[i]).attr("d", line).attr("fill", "none").attr("stroke", "steelblue")
+                .attr("stroke-width", 1.5).attr("transform", `translate(${padding.left},${padding.top})`)
+                .attr("marker-end","url(#arrow)");  
+        }
+// 
+        // // 创建折线图
+        // var line = d3.line().defined(d => !isNaN(d.price))
+        //     .x(function (d) {
+        //         if (d.price == '') {
+        //             return
+        //         }
+        //         return xScale(d.month)
+        //     })
+        //     .y(function (d) {
+        //         if (d.price == '') {
+        //             return
+        //         }
+        //         return yScale(d.price)
+        //     });
+
+
+        // // tip 
+        // var tip = d3.tip().attr("class", "d3_tip").html(function (d) {
+        //     return `<div>111${d.month}: ${d.price}</div>`
+        // })
+
+        // svg.call(tip)
+
+        // let path = svg.append("path")
+        // path.datum(data).attr("fill", "none")
+        //     .attr("stroke", "steelblue")
+        //     .attr("stroke-width", 1.5)
+        //     .attr("stroke-linejoin", "round")
+        //     .attr("stroke-linecap", "round")
+        //     .attr("d", line).attr("transform", `translate(${padding.left}, ${padding.top})`).attr("cursor", "pointer")
+
+
+        // svg.append("text").text("苹果单价走势图").attr("transform", `translate(${innerWidth / 2}, ${20})`)
+        // svg.append('g').attr("class", "content").data(data).selectAll("text").data(data).enter().append("text").text(function (d, i) {
+        //     return d.price
+        // }).attr("x", d => xScale(d.month))
+        //     .attr("y", d => yScale(d.price)).attr("transform", `translate(${padding.left}, ${padding.top})`)
+    </script>
+</body>
+
+</html>

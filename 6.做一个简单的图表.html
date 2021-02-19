@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <svg>
+        <rect></rect>
+        <rect></rect>
+    </svg>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <!--d3.select /// de.selectAll() 选择-->
+    <!--d3.select.selectAll().txet()-->
+    <script>
+        // 画布 要绘图首先要有一块绘画的画布，html5提供了两种强有力的画布
+        // SVG和Canvas
+        // SVG是什么
+        // svg是可缩放矢量图型，用于描述二位矢量图形的一种图形格式是由万维网
+        // 定的开放标准，svg使用xml格式来定义图形，除了IE8之前的版本，绝大部分都支持SVG
+        // 可将本直接嵌入html中显示
+
+        // let p = d3.select('body').selectAll('p').text("www.baidu.con")
+        // p.style("color", 'red').style("font-size", "32px")
+
+        // SVG的特点
+        // svg绘制的是矢量图，因此对图像进行放大不会失真
+        // 基于xml，可以为每个元素添加javascript事件处理器
+        // 每个图形均视为对象，更改对象的属性，图形也会改变
+        // 不适合游戏应用
+
+        // canvas是什么
+        // canvas是可以通过javascript来绘制2D图形，是html5中新增的元素，canvas有如下特点
+        // 绘制的是位图，图像放大后会失真， 不支持事件处理器
+        //  能够以。png或。jpg格式保存图像
+        // 适合游戏应用
+
+        // 添加画布
+        // d3提供了众多的svg图形的生成器，他们都是只支持svg的
+
+        var width = 300
+        var height = 300
+        var svg = d3.select('body').select('svg')
+        svg.attr("width", width).attr("height", height)
+
+
+        // 绘制矩形
+        var rectHeight = 25;   //每个矩形所占的像素高度(包括空白)
+        var dataset = [250, 210, 170, 130, 90]
+        svg.selectAll("rect")   //选择svg中所有的矩形
+            .data(dataset)  //绑定数组
+            .enter()  //为却是的元素返回占位符
+            .append("rect")  // 添加足够数量的矩形元素
+            .attr("x", 20)
+            .attr("y", function (d, i) {
+                return i * rectHeight;
+            })
+            .attr("width", function (d) {
+                return d;
+            })
+            .attr("height", rectHeight - 2)
+            .attr("fill", "steelblue");
+    </script>
+</body>
+
+</html>

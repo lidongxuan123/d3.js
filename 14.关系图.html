@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <svg width="500" height="600">
+
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script>
+        var svg = d3.select('svg')
+        var width = +svg.attr("width")
+        var height = +svg.attr("height")
+        let position = {
+            left: 50,
+            top: 50,
+            right: 50,
+            bottom: 50
+        }
+        var innerWidth = width - position.left - position.right
+        var innerHeight = height - position.top - position.bottom
+
+        var nodes = [{ name: "桂林" }, { name: "广州" },
+        { name: "厦门" }, { name: "杭州" },
+        { name: "上海" }, { name: "青岛" },
+        { name: "天津" }];
+
+        var edges = [{ source: 0, target: 1 }, { source: 0, target: 2 },
+        { source: 0, target: 3 }, { source: 1, target: 4 },
+        { source: 1, target: 5 }, { source: 1, target: 6 }];
+        // 定义布局
+        var force = d3.forceSimulation(nodes)
+        // .force("charge", d3.forceManyBody())
+        // .force("link", d3, forceLink(links))
+        // .force("center", d3.forceCenter())
+
+
+
+        // 划线
+        var svg_edges = svg.selectAll("line").data(edges).enter().append("line").style("stroke", "#333").style("stroke-width", 1)
+
+
+
+
+        // 添加节点的颜色
+        var color = d3.scaleOrdinal(d3.schemeCategory10)
+
+        //    添加节点
+        var svg_nodes = svg.selectAll("circle").data(nodes).enter().append("circle").attr("r", 5)
+            .style("fill", function (d, i) {
+                return color(i)
+            }).attr("transform", ` translate(${position.left}, ${position.top}) `).attr("cx", function (d, i) {
+                return d.x
+            }).attr("cy", function (d, i) {
+                return d.y
+            })
+
+
+        // 给节点添加文字
+
+        var svg_text = svg.selectAll("text").data(nodes).enter().append("text").style("fill", 'black').attr("dx", function (d) {
+            return d.x
+        }).attr("dy", function (d) {
+            return d.y
+        }).text(function (d) {
+            return d.name
+        }).attr("transform", ` translate(${position.left}, ${position.top}) `)
+
+
+
+
+
+        // console.log(nodes)
+        // console.log(edges)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <svg id="main">
+        <!--<path d="M0 0 H 90 V 90  H 10 L10 10"></path>-->
+    </svg>
+    <svg width="500" height="600" id="svg">
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script>
+        
+        const arrayData = []
+        for (let j = 0; j < 150; j++) {
+            let data = []
+            for (let i = 0; i < 6; i++) {
+                data.push({
+                    name: "name" + i,
+                    total: Math.floor(Math.random() * 10000 + 10000),
+                    value: Math.floor(Math.random() * 10000)
+                })
+            }
+            arrayData.push(data)
+        }
+        console.log(arrayData)
+        const padding = {
+            top: 50,
+            bottom: 50,
+            right: 50,
+            left: 50
+        }
+        const svg = d3.select("svg#svg")
+        const width = +svg.attr("width")
+        const height = +svg.attr("height")
+        const innerWidth = width - padding.left - padding.right
+        const innerHeight = width - padding.top - padding.bottom
+
+
+        // 画台湾的地图
+        // var path = svg.append("g").append('path')
+
+        // var projection = d3.geoNaturalEarth1()
+        // console.log(projection)
+        // var projection = d3.geoPath(projection);
+
+        // path.data()
+
+
+
+        const tip = d3.tip() // 悬浮框  d3之外的库
+        tip.html(d=> 
+            d.properxx.name
+        )
+        svg.call(tip)  //使用
+
+        .on("click",function(d) {
+            tip.show(d)
+        })
+
+        // 美化地图
+        
+
+
+        // d3.json("./taiwan.json").then(data => {
+        //     console.log(data)
+        // })
+        // console.log(path)
+        // // 获取名子列表
+        // const g = svg.append("g").attr("id", "g_y").attr("transform", `translate(${padding.left},${padding.top})`)
+        // var index = 0
+        // let nameArr = Array.from(new Set(arrayData[0].map(d => d.name)))
+        // // const xScale = d3.scaleLinear().domain([0, d3.max(arrayData[index], d => d.total)]).range([0, innerWidth]).nice()
+
+        // const xScale = d3.scaleBand().domain(nameArr).range([0, innerWidth])
+        // // 设置刻度
+        // const xAxis = d3.axisBottom(xScale).ticks(1).tickSize(-innerHeight)
+
+
+
+
+        // g.append("g").call(xAxis).attr("transform", `translate(0,${innerHeight})`)
+        // const yScale = d3.scaleLinear().domain([d3.max(arrayData[index], d => d.value), 0]).range([0, innerHeight]).nice()
+        // const yAxis = d3.axisLeft(yScale).tickSize(-innerWidth)
+        // g.append("g").attr("class", "yAxis").call(yAxis)
+
+
+        // let path = svg.append("path").attr("transform", `translate(${padding.left}, ${padding.top})`)
+        // // let arr = [{
+        // //     x: 1, 
+        // //     y:1
+        // // }, {
+        // //     x:100, 
+        // //     y:100
+        // // }]
+        // let line = d3.line().x(function (d, i) {
+        //     return xScale(d.name)
+        // }).y(function (d, i) {
+        //     return yScale(d.value)
+        // })
+        // console.log(line)
+        // function render(data) {
+        //     path.transition().ease(d3.easeLinear).duration(1000).attr("d", line(data)).attr("stroke", "black").attr("stroke-width", "3px").attr("fill", "none")
+        // }
+        // var index = 0
+        // let inter = setInterval(function () {
+        //     if(index > arrayData.length) {
+        //         clearInterval(inter)
+        //     } else {
+        //         render(arrayData[index])
+        //         index ++
+        //     }
+        // }, 1000)
+
+        // path.attr("d", line(arr)).attr("stroke", "black").attr("stroke-width", "3px").attr("fill", "none")
+
+        // path  d属性
+        // M 放到某个位置
+        //  三次贝塞尔曲线
+        //    path生成器
+        // d3.line()  // 用于折现图
+        // d3.geoPath().projection()   用于地图
+        // d3.area()   用于河流
+        // d3.arc()   用于饼状图
+        // d3.lineRadial().angle().radius()  极坐标系
+        // d3.scaleTime
+
+
+        // function renderUpdate(data) {
+        //     const line = d3.line()
+        //         .x(function (d, i) {
+
+        //         })
+        //         .y(function(d, i) {
+
+        //         }).curve(d3.curveCardinal.tension(0.5))
+
+
+        //         d3.select("#xxx").datum(data).attr("stroke", "green")
+        //         .attr("fill", "none")
+        //         .attr("stroke-width", 2.5)
+        //         .transtion().duration(2000)
+        //         .attr("d", line)
+        // }
+
+
+
+
+
+
+
+        // let inter = setInterval(function () {
+        //     if (index >= arrayData.length) {
+        //         clearInterval(inter)
+        //     }else {
+        //        index =  index +1
+        //        console.log(index)
+        //        update(arrayData[index])
+        //     }
+        // }, 1000)
+
+        // function update(seq) {
+        //     let circle = svg.selectAll("circle").data(seq, d => d.name)
+        //     let circleenter = circle.enter().append("circle")
+        //         .attr("cx", function (d, i) {
+        //             return xScale(d.total)
+        //         })
+        //         .attr("cy", function (d, i) {
+        //             return yScale(d.value)
+        //         })
+        //         .attr("r", 10)
+        //         .attr("opacity", 0.8)
+
+        //         circle.merge(circleenter).transition().ease(d3.easeLinear).duration(1000).attr("cx", function (d, i) {
+        //             return xScale(d.total)
+        //         })
+        //         .attr("cy", function (d, i) {
+        //             return yScale(d.value)
+        //         })
+        // }
+    </script>
+</body>
+
+</html>

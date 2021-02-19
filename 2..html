@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    .container {
+        height: 200px;
+        background: #DFDFDF;
+    }
+
+    .color {
+        color: purple;
+    }
+
+    .con {
+        height: 100px;
+    }
+    .trans{
+        height: 50px;
+        width: 50px;
+        background: #333;
+        border-radius: 50px;
+        position: relative;
+    }
+</style>
+
+<body>
+    <div class="container" title="我是一个容器">
+        <p></p>
+        <p></p>
+        <p></p>
+    </div>
+    <div class="trans">
+
+    </div>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script>
+        //   创建并追加元素内部添加属性
+        let divContainer = d3.select('.container')
+        divContainer.append('p').text('我进到里面了')
+        // // 获取元素的属性
+        // console.log(divContainer.attr('title'))
+        // // 设置元素的属性
+        // divContainer.attr('title', function () { return "xxxx" })
+        // // 为当前选择调用一个函数
+        // divContainer.call(function () {
+        //     console.log("为当前选择调用一个i函数")
+        // })
+        // 添加或移除css类
+        // divContainer.classed({ 'color': true })
+        // divContainer.style()
+        // selection
+        // divContainer.enter().selectAll('p').data([1,2,3,4]).text(function(d) {
+        //     return d
+        // })
+
+        // divContainer.data([1,2,3,4]).enter().append('p').text(function(d){
+        //     return d
+        // })
+        // filter基于数据选择过滤
+        // d3.selectAll('p').data([1, 2, 3, 4]).text(
+        //     function (d) {
+        //         return d
+        //     }
+        // )
+        // 
+        // each
+        d3.selectAll('p').each(function (d) {
+            console.log("11111111")
+            // d3.selectAll('p').text(function(){
+            //     return d
+            // })
+        })
+        // html 设置DOM元素的内容
+        d3.select('.container').html("hello world!")
+
+        // 在一个存在的元素之前插入一个元素
+        d3.select('.container').insert('div', '.container').html("container上面").style({ color: 'red' })
+        // transiton用于过度
+        d3.select('.trans').transition('position')
+            .attr('left', 570)
+            .duration(1000)
+            .ease('bounce')
+
+        // 
+    </script>
+</body>
+
+</html>

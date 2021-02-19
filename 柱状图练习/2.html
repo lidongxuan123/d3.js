@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <svg width="500" height="600" id="svg">
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script>
+        const arrayData = []
+        for (let j = 0; j < 150; j++) {
+            let data = []
+            for (let i = 0; i < 15; i++) {
+                data.push({
+                    name: "name" + i,
+                    total: Math.floor(Math.random() * 10000 + 10000),
+                    value: Math.floor(Math.random() * 10000)
+                })
+            }
+            arrayData.push(data)
+        }
+        console.log(arrayData)
+        const padding = {
+            top: 50,
+            bottom: 50,
+            right: 50,
+            left: 50
+        }
+        const svg = d3.select("svg#svg")
+        const width = +svg.attr("width")
+        const height = +svg.attr("height")
+        const innerWidth = width - padding.left - padding.right
+        const innerHeight = width - padding.top - padding.bottom
+
+        // 获取名子列表
+        const g = svg.append("g").attr("id", "g_y").attr("transform", `translate(${padding.left},${padding.top})`)
+        var index = 0
+        let nameArr = Array.from(new Set(arrayData[0].map(d => d.name)))
+        const xScale = d3.scaleLinear().domain([0,d3.max(arrayData[index], d => d.total)]).range([0, innerWidth]).nice()
+        const xAxis = d3.axisBottom(xScale)
+        g.append("g").call(xAxis).attr("transform", `translate(0,${innerHeight})`)
+        const yScale = d3.scaleLinear().domain([d3.max(arrayData[index], d => d.value), 0]).range([0, innerHeight]).nice()
+        const yAxis = d3.axisLeft(yScale)
+        g.append("g").attr("class", "yAxis").call(yAxis)
+        let inter = setInterval(function () {
+            if (index >= arrayData.length) {
+                clearInterval(inter)
+            }else {
+               index =  index +1
+               console.log(index)
+               update(arrayData[index])
+            }
+        }, 1000)
+
+        function update(seq) {
+            let circle = svg.selectAll("circle").data(seq, d => d.name)
+            let circleenter = circle.enter().append("circle")
+                .attr("cx", function (d, i) {
+                    return xScale(d.total)
+                })
+                .attr("cy", function (d, i) {
+                    return yScale(d.value)
+                })
+                .attr("r", 10)
+                .attr("opacity", 0.8)
+
+                circle.merge(circleenter).transition().ease(d3.easeLinear).duration(1000).attr("cx", function (d, i) {
+                    return xScale(d.total)
+                })
+                .attr("cy", function (d, i) {
+                    return yScale(d.value)
+                })
+        }
+    </script>
+</body>
+
+</html>

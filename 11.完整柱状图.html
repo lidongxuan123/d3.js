@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script>
+        var width = 400
+        var height = 400
+        // 创建svg
+        var svg = d3.select('body').append('svg')
+        svg.attr('width', width)
+        svg.attr('height', height)
+        var padding = { left: 30, right: 30, top: 20, bottom: 20 }
+
+        // 设置比例尺
+        var dataSet = [10, 20, 30, 40, 50, 60]
+        var xScale = d3.scaleLinear().domain([0, 6])
+            .range([0, width - padding.left - padding.right])
+
+        var yScalse = d3.scaleLinear().domain([0, d3.max(dataSet)]).range(height - padding.top - padding.bottom, 0)
+
+        // 定义坐标轴
+        svg.append("g").attr("class", "axis").attr("transform", "translate(20,280)")
+            .call(xScale);
+        svg.append("g").attr("class", "axis").attr("transform", "translate(20,280)")
+            .call(yScalse)
+    </script>
+</body>
+
+</html>

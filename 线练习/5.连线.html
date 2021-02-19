@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .domain {
+            display: none;
+        }
+        .line_tick{
+            opacity: 0.5;
+            color: #DFDFDF;
+        }
+    </style>
+</head>
+
+<body>
+    <svg width="500" height="600" id="svg">
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
+    <script>
+        // 主要做三方面的练习
+        // 1.去除坐标轴的横线
+        // 2.坐标轴刻度
+        // 3.数据格式化
+        // 4.添加横线
+
+
+        const data = [
+            {
+                date: '2017-11-17',
+                high: 171.389999,
+                low: 169.639999,
+                open: 171.039993,
+                close: 170.149994
+            }, {
+                date: '2017-11-20',
+                high: 170.559998,
+                low: 169.559998,
+                open: 170.289993,
+                close: 169.979996,
+            }, {
+                date: '2017-11-21',
+                high: 173.699997,
+                low: 170.779999,
+                open: 170.779999,
+                close: 173.139999,
+            }, {
+                date: '2017-11-22',
+                high: 175,
+                low: 173.050003,
+                open: 173.360001,
+                close: 174.960007,
+            }, {
+                date: '2017-11-24',
+                high: 175.5,
+                low: 174.649994,
+                open: 175.100006,
+                close: 174.970001
+            }, {
+                date: '2017-11-27',
+                high: 175.080002,
+                low: 173.339996,
+                open: 175.050003,
+                close: 174.089996,
+            }, {
+                date: '2017-11-28',
+                high: 174.869995,
+                low: 171.860001,
+                open: 174.300003,
+                close: 173.070007
+            }, {
+                date: '2017-11-29',
+                high: 172.919998,
+                low: 167.160004,
+                open: 172.630005,
+                close: 169.479996,
+            }, {
+                date: '2017-11-30',
+                high: 172.139999,
+                low: 168.440002,
+                open: 170.429993,
+                close: 171.850006
+            }, {
+                date: '2017-12-01',
+                high: 171.669998,
+                low: 168.5,
+                open: 169.949997,
+                close: 171.050003,
+            }, {
+                date: '2017-12-04',
+                high: 172.619995,
+                low: 169.630005,
+                open: 172.479996,
+                close: 169.800003
+            }, {
+                date: '2017-12-05',
+                high: 171.520004,
+                low: 168.399994,
+                open: 169.059998,
+                close: 169.639999
+            }, {
+                date: '2017-12-06',
+                high: 170.199997,
+                low: 166.460007,
+                open: 167.5,
+                close: 169.009995
+            }
+        ]
+
+        const padding = {
+            top: 50,
+            bottom: 50,
+            right: 50,
+            left: 50
+        }
+        const svg = d3.select("svg#svg")
+        const width = +svg.attr("width")
+        const height = +svg.attr("height")
+        const innerWidth = width - padding.left - padding.right
+        const innerHeight = width - padding.top - padding.bottom
+
+
+        // 对数据进行处理
+        // 对日期进行处理
+        let DateArr = []
+        for (let i = 0; i < data.length; i++) {
+            let time = new Date(data[i].date)
+            let month = time.getMonth()
+            let day = time.getDate()
+            DateArr.push(month + "/" + day)
+        }
+
+        let xScale, yScale;
+        let g = svg.append("g")
+        // 创建x轴坐标
+        function createScale(data, DateArr) {
+            console.log(d3.min(data, d => d.low))
+            console.log(d3.max(data, d => d.high))
+            xScale = d3.scaleBand().domain(DateArr).range([0, innerWidth]).padding(1)
+            yScale = d3.scaleLinear().domain([Math.floor(
+                d3.min(data, d => d.low)), Math.floor(d3.max(data, d => d.high))
+            ]).range([
+                innerHeight, 0
+            ]).nice()
+
+            // 创建xy轴
+
+            let xAxis = g.append("g").call(d3.axisBottom(xScale)).attr("transform", `translate(${padding.left}, ${padding.top + innerHeight})`)
+            // let yAxis = g.append("g").call(d3.axisLeft(yScale).tickFormat(d3.format("$~f"))
+            //     .tickValues(d3.scaleLinear().domain(yScale.domain()).ticks())).attr("transform", `translate(${padding.left}, ${padding.top})`)
+            let yAxis = g.append("g").call(d3.axisLeft(yScale).tickValues(5).tickSize(-innerWidth).tickFormat(d3.format("$~f"))
+                .tickValues(d3.scaleLinear().domain(yScale.domain()).ticks())).attr("transform", `translate(${padding.left}, ${padding.top})`)
+        }
+        createScale(data, DateArr)
+
+        g.selectAll(".tick line").attr("class","line_tick")
+        let gs = g.append("g")
+            .attr("stroke-linecap", "round")
+            .attr("stroke", "black")
+            .selectAll("g")
+            .data(data)
+            .join("g")
+            .attr("transform", function (d, i) {
+                let time = new Date(d.date)
+                let month = time.getMonth()
+                let day = time.getDate()
+                return "translate(" + xScale(month + '/' + day) + ',' + padding.top + ") "
+            })
+        gs.append("line")
+            .attr("y1", d => {
+                return yScale(d.low)
+            })
+            .attr("y2", d => { return yScale(d.high) }).attr("transform", `translate(${padding.left}, ${0})`);
+        gs.append("line")
+            .attr("y1", d => {
+                return yScale(d.open)
+            }).attr("transform", `translate(${padding.left}, ${0})`)
+            .attr("y2", d => { return yScale(d.close) }).attr("stroke-width", 5).attr("stroke", function (d, i) {
+                if (d.open > d.close) {
+                    return "green"
+                } else {
+                    return "red"
+                }
+            });
+        // 添加网格线
+    </script>
+</body>
+
+</html>

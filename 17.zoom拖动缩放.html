@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <svg width="500" height="600">
+
+    </svg>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script>
+        var svg = d3.select('svg')
+        var width = +svg.attr("width")
+        var height = +svg.attr("height")
+        let position = {
+            left: 50,
+            top: 50,
+            right: 50,
+            bottom: 50
+        }
+        const g = svg.append("g")
+        for (let i = 0; i < 100; i++) {
+            let r = Math.floor(Math.random() * 20 + 1)
+            let x = Math.floor(Math.random() * width)
+            let y = Math.floor(Math.random() * height)
+            let color = Math.floor(Math.random() * 255)
+            g.append("circle")
+                .attr("cx", x)
+                .attr("cy", y)
+                .attr("r", r)
+                .attr("fill", `rgb(${color}, ${color}, ${color})`)
+        }
+        svg.call(d3.zoom().on("zoom"))
+
+
+
+
+        // svg.append("d").data(data, d=> d.name)  // 添加索
+
+        // 读取csv
+        d3.csv(path).then(data=> {
+            
+        })
+    </script>
+</body>
+
+</html>
